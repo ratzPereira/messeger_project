@@ -16,6 +16,8 @@ mongoose
     'mongodb+srv://ratz:banana69@cluster0.4j52b.mongodb.net/messenger_app?retryWrites=true&w=majority',
     {
       useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
       useUnifiedTopology: true,
     }
   )
