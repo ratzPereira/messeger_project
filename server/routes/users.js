@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-  const { username, password, emoji } = req.body
+  const { username, password } = req.body
 
   try {
     const user = await Users.findOne({ username })
@@ -41,7 +41,7 @@ router.post('/login', async (req, res) => {
 
     return res.status(200).json({
       message: `${user.username} logged in`,
-      emoji,
+      emoji: user.emoji,
       token,
     })
   } catch (error) {
