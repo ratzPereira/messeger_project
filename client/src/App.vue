@@ -2,13 +2,29 @@
   <div id="app">
     <div class="container">
       <div class="header">
-        <button class="btn-logout">Logout</button>
+        <button class="btn-logout" v-if="authenticated()" @click="logout">
+          Logout
+        </button>
         <h1>Welcome to Twinder</h1>
       </div>
       <router-view />
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    logout() {
+      localStorage.clear()
+      this.$router.push('/')
+    },
+    authenticated() {
+      return !!localStorage.token
+    },
+  },
+}
+</script>
 
 <style lang="scss">
 * {
@@ -94,5 +110,14 @@ input {
   width: 100%;
   color: #eee;
   font-size: 18px;
+}
+
+.errorMessage {
+  background-color: #fdd;
+  padding: 10px;
+  border-radius: 3px;
+  color: red;
+  font-size: 13px;
+  margin: 10px;
 }
 </style>

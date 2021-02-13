@@ -32,29 +32,11 @@
         </div>
 
         <div class="field-area">
-          <p class="label-emoji">Choose your emoji: {{ form.emoji }}</p>
-          <div class="emoji-list" :class="{ error: rules.emoji }">
-            <span
-              class="emoji"
-              :class="{ selected: emoji == form.emoji }"
-              v-for="emoji in emojis"
-              :key="emoji"
-              @click="form.emoji = emoji"
-            >
-              {{ emoji }}
-            </span>
-          </div>
-          <span class="error-message" v-show="rules.emoji">
-            {{ rules.emoji }}
-          </span>
-        </div>
-
-        <div class="field-area">
-          <button class="button-register" type="submit">Register</button>
+          <button class="button-register" type="submit">Join</button>
         </div>
       </form>
       <p class="link-register">
-        <router-link to="/login">Already registed</router-link>
+        <router-link to="/">Register</router-link>
       </p>
     </div>
   </div>
@@ -68,42 +50,14 @@ export default {
   components: {},
 
   data: () => ({
-    emojis: [
-      '😀',
-      '😁',
-      '😊',
-      '😇',
-      '🥰',
-      '🤩',
-      '😚',
-      '🤪',
-      '🤑',
-      '🤭',
-      '🤐',
-      '😑',
-      '😒',
-      '😴',
-      '🤧',
-      '🤓',
-      '🥺',
-      '😱',
-      '🤬',
-      '💩',
-      '👀',
-      '🙅‍♂️',
-      '🤷‍♂️',
-      '👩‍🚀',
-    ],
     errorMessage: null,
     form: {
       username: null,
       password: null,
-      emoji: null,
     },
     rules: {
       username: null,
       password: null,
-      emoji: null,
     },
   }),
   methods: {
@@ -111,20 +65,24 @@ export default {
       this.rules = {
         username: !this.form.username ? 'Please insert your name' : false,
         password: !this.form.password ? 'Please insert your password' : false,
-        emoji: !this.form.emoji ? 'Please choose your emoji' : false,
       }
-      return !this.rules.username && !this.rules.password && !this.rules.emoji
+      return !this.rules.username && !this.rules.password
     },
     async onSubmit() {
       if (!this.validate()) {
         return
       }
       try {
-        await apiPublic.post('/users', this.form)
-        this.$router.push('/login')
+        const response = await apiPublic.post('/users/login', this.form)
+
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('username', response.data.username)
+        localStorage.setItem('emoji', response.data.emoji)
+
+        this.$router.push('/chat')
       } catch (error) {
         console.log(error)
-        this.errorMessage = 'Registration failed'
+        this.errorMessage = 'Login failed'
       }
     },
   },

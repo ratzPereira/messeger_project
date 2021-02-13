@@ -38,7 +38,8 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 const userAuth = require('./routes/middleware/authMiddleware')
-app.use('/', userAuth, indexRouter)
+
 app.use('/users', usersRouter)
+app.use('/', userAuth, indexRouter)
 
 module.exports = app
